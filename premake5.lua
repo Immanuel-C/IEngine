@@ -22,7 +22,7 @@ workspace "IEngine"
 
     function defaultBuildLocation()
         targetdir ("bin/TestApp/%{cfg.buildcfg}")
-        objdir ("bin-int/TestApp/%{cfg.buildcfg}")
+        objdir ("bin-int/%{prj.name}/%{cfg.buildcfg}")
     end
 
     startproject "TestApp"
@@ -47,6 +47,12 @@ workspace "IEngine"
         }
 
         links { "IEngine", "ILog", "IWindow" }
+
+        defines {
+            "IENGINE_DLL",
+            "IWINDOW_DLL",
+            "ILOG_DLL",
+        }
 
         defaultBuildLocation()
         defaultBuildCfg();
@@ -114,7 +120,8 @@ workspace "IEngine"
 
         
         defines {
-            "IWINDOW_BUILD_DLL"
+            "IWINDOW_BUILD_DLL",
+            "IWINDOW_DLL",
         }
 
         defaultBuildLocation()
@@ -132,7 +139,8 @@ workspace "IEngine"
         }
 
         defines {
-            "ILOG_BUILD_DLL"
+            "ILOG_BUILD_DLL",
+            "ILOG_DLL",
         }
 
         defaultBuildLocation()
@@ -169,7 +177,8 @@ workspace "IEngine"
         }
 
         defines {
-            "IE_BUILD_DLL"
+            "IENGINE_DLL",
+            "IENGINE_BUILD_DLL",
         }
 
         defaultBuildLocation()
