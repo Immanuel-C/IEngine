@@ -1,4 +1,4 @@
-workspace "IWindow"
+workspace "IEngine"
     configurations {"Debug", "Release"}
     architecture "x86_64"
 
@@ -21,8 +21,8 @@ workspace "IWindow"
     end
 
     function defaultBuildLocation()
-        targetdir ("bin/%{prj.name}/%{cfg.buildcfg}")
-        objdir ("bin-int/%{prj.name}/%{cfg.buildcfg}")
+        targetdir ("bin/TestApp/%{cfg.buildcfg}")
+        objdir ("bin-int/TestApp/%{cfg.buildcfg}")
     end
 
     startproject "TestApp"
@@ -46,7 +46,7 @@ workspace "IWindow"
             vulkanSdk .. "/Include"
         }
 
-        links { "IEngine" }
+        links { "IEngine", "ILog", "IWindow" }
 
         defaultBuildLocation()
         defaultBuildCfg();
@@ -78,7 +78,7 @@ workspace "IWindow"
 
     project "IWindow"
         location "deps/IWindow/src"
-        kind "StaticLib"
+        kind "SharedLib"
         language "C++"
         cppdialect "C++17"
 
@@ -112,12 +112,17 @@ workspace "IWindow"
             "ImGui",
         }
 
+        
+        defines {
+            "IWINDOW_BUILD_DLL"
+        }
+
         defaultBuildLocation()
         defaultBuildCfg();
 
     project "ILog"
         location "deps/ILog"
-        kind "StaticLib"
+        kind "SharedLib"
         language "C"
         cdialect "C17"
 
@@ -126,12 +131,16 @@ workspace "IWindow"
             "%{prj.location}/ILog.h",
         }
 
+        defines {
+            "ILOG_BUILD_DLL"
+        }
+
         defaultBuildLocation()
         defaultBuildCfg();
 
     project "IEngine"
         location "src"
-        kind "StaticLib"
+        kind "SharedLib"
         language "C++"
         cppdialect "C++17"
 
@@ -148,7 +157,20 @@ workspace "IWindow"
             vulkanSdk .. "/Include"
         }
 
-        links {"ILog", "IWindow"}
+
+        libdirs {
+            vulkanSdk .. "/Lib",
+        }
+
+        links {
+            "ILog", 
+            "IWindow",
+            "vulkan-1",
+        }
+
+        defines {
+            "IE_BUILD_DLL"
+        }
 
         defaultBuildLocation()
         defaultBuildCfg();
